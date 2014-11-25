@@ -1,8 +1,8 @@
 from numpy import *
 import matplotlib.pyplot as plt
 
-men = -10
-may = 10
+men = -100
+may = 100
 W = 0.7
 C1 = 1.4
 C2 = 1.4
@@ -17,16 +17,19 @@ def fun2(x):
 	return (abs(x).sum(axis=1) + prod(abs(x),axis=1))
 
 def fun3(x):
+	aux = 0
+	aux2 = zeros(len(x))
 	for i in range(len(x)):
-		for j in range(i+1):
-			aux += x[i][j]
-		aux = x*x
-	return aux.sum(axis = 1)
+		for j in range(len(x[i])):
+			for h in range(j+1):
+				aux += x[i][h]
+			aux2[i] += aux*aux
+	return aux2
 
 
 x = random.random((nparts,ndims))
 x = x * (may - men) + men
-fx = fun2(x)
+fx = fun3(x)
 pbest = x.copy()
 fx_pbest = fx.copy()
 index = argmin(fx).copy()
@@ -49,7 +52,7 @@ while i < gmax:
 	x[ladme] = pro
 	x[ladma] = pro
 
-	fx = fun2(x)
+	fx = fun3(x)
 	index = fx < fx_pbest
 	pbest[index] = x[index]
 	fx_pbest[index] = fx[index]
