@@ -1,43 +1,42 @@
 from numpy import *
 import matplotlib.pyplot as plt
 
-def fun1(p):
-    return ((p*p).sum(axis=1))
+def fun1(x):
+    return ((x*x).sum(axis=1))
 
-may = 5
-men = -5
-nparts = 2
-ndims = 5
-gmax = 10
+may = 10
+men = -10
+nparts = 5
+ndims = 3
+gmax = 50
 CR = .5
-F = 1.4
-p = random.random((nparts,ndims))
-p = p *(may - men) + men
+F = 1.8
+x = random.random((nparts,ndims))
+x = x *(may - men) + men
 u = zeros((nparts,ndims))
-fx = fun1(p)
+fx = fun1(x)
+fu = fun1(u)
 g = 0
-while g < gmax
-    i = 0
-    for i in range(len(p)):
+while g < gmax:
+    for i in range(len(x)):
         vec = []
-        s = 0
-        for s in range(len(p)):
+        for s in range(len(x)):
             vec.append(s)
         random.shuffle(vec)
         r1 = vec[0]
         r2 = vec[1]
         r3 = vec[2]
-
-        jrand = random.randint(p[r2])
-        j = 0
+        jrand = random.randint(ndims)
         for j in range(ndims):
-            if random.random((nparts,ndims)) < CR or j == jrand:
-                u[i][j] = p[r3][j] + F * (p[r1][j] - p[r2][j])
+            if random.random() < CR or j == jrand:
+                u[i][j] = x[r3][j] + F * (x[r1][j] - x[r2][j])
             else:
-                u[i][j] = p[i][j]
-
-        if fun1(u[i])<= fun1(x[i]):
-            p[i] = u[i]
+                u[i][j] = x[i][j]
+            fx = fun1(x)
+            fu = fun1(u)
+        print(fx)
+        if fu[i] <= fx[i]:
+            x[i] = u[i]
         else:
-            p[i] = p[i]
+            x[i] = x[i]
     g += 1
